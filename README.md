@@ -1,9 +1,9 @@
-# Omarchy
+# Noctra Hyprland Edition
 
-Omarchy is a beautiful, modern & opinionated Linux distribution by DHH.
+Noctra Hyprland Edition is a dark, polished, Hyprland-focused, Arch-based power-user edition of Noctra OS. It keeps the proven installer structure and workflow from its upstream roots while presenting a Noctra-first desktop identity.
 
-Read more at [omarchy.org](https://omarchy.org).
+Powered by Arch Linux and Hyprland. Derived from Omarchy.
 
-## License
+## License and attribution
 
-Omarchy is released under the [MIT License](https://opensource.org/licenses/MIT).
+This project is derived from Omarchy and remains under the [MIT License](https://opensource.org/licenses/MIT). The original Omarchy copyright and license text are preserved in `LICENSE`; additional attribution is recorded in `NOTICE`.

@@ -1,8 +1,8 @@
 --
--- Dynamic Omarchy Theme Menu for Elephant/Walker
+-- Dynamic Noctra Theme Menu for Elephant/Walker
 --
 Name = "omarchythemes"
-NamePretty = "Omarchy Themes"
+NamePretty = "Noctra Themes"
 HideFromProviderlist = true
 
 -- Check if file exists using Lua (no subprocess)

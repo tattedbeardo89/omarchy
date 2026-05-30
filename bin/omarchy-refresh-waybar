@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Reset Waybar config to Omarchy defaults
+# omarchy:summary=Reset Waybar config to Noctra defaults
 # omarchy:examples=omarchy refresh waybar
 
 WAYBAR_CONFIG="$HOME/.config/waybar/config.jsonc"

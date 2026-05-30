@@ -1,7 +1,7 @@
 /**
- * Syncs pi's light/dark theme with the active Omarchy theme.
+ * Syncs pi's light/dark theme with the active Noctra theme.
  *
- * Omarchy light themes include:
+ * Noctra light themes include:
  *   ~/.config/omarchy/current/theme/light.mode
  */
 

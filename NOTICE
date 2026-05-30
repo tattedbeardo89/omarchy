@@ -1,0 +1,12 @@
+Noctra Hyprland Edition Attribution Notice
+=========================================
+
+Noctra Hyprland Edition is derived from Omarchy, the Hyprland-focused Arch Linux distribution originally created by David Heinemeier Hansson.
+
+The original Omarchy project is licensed under the MIT License. This repository preserves the original MIT license text and copyright notice in LICENSE:
+
+  Copyright (c) David Heinemeier Hansson
+
+Noctra branding, documentation, configuration text, and other modifications in this fork are not intended to imply that the original Omarchy work was created by Noctra OS. Upstream Omarchy attribution and license requirements must be retained in redistributed copies or substantial portions of the software.
+
+Until dedicated Noctra infrastructure is configured, some command names, paths, package channels, mirrors, and migration internals may intentionally remain Omarchy-compatible to preserve installer and update functionality.

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-# omarchy:summary=Overwrite the user config for hyprlock with the Omarchy default.
+# omarchy:summary=Overwrite the user config for hyprlock with the Noctra default.
 
 omarchy-refresh-config hypr/hyprlock.conf

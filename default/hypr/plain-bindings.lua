@@ -3,7 +3,7 @@ require("default.hypr.bindings.clipboard")
 require("default.hypr.bindings.tiling-v2")
 require("default.hypr.bindings.utilities")
 
--- Application bindings without Omarchy's preinstalled web apps, TUIs, or desktop apps.
+-- Application bindings without Noctra Hyprland Edition preinstalled web apps, TUIs, or desktop apps.
 o.bind("SUPER + RETURN", "Terminal", { omarchy = "terminal" })
 o.bind("SUPER + SHIFT + RETURN", "Browser", { omarchy = "browser" })
 o.bind("SUPER + SHIFT + F", "File manager", { omarchy = "nautilus" })

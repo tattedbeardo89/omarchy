@@ -3,16 +3,13 @@
 # Set install mode to online since boot.sh is used for curl installations
 export OMARCHY_ONLINE_INSTALL=true
 
-ansi_art='                 ▄▄▄
- ▄█████▄    ▄███████████▄    ▄███████   ▄███████   ▄███████   ▄█   █▄    ▄█   █▄
-███   ███  ███   ███   ███  ███   ███  ███   ███  ███   ███  ███   ███  ███   ███
-███   ███  ███   ███   ███  ███   ███  ███   ███  ███   █▀   ███   ███  ███   ███
-███   ███  ███   ███   ███ ▄███▄▄▄███ ▄███▄▄▄██▀  ███       ▄███▄▄▄███▄ ███▄▄▄███
-███   ███  ███   ███   ███ ▀███▀▀▀███ ▀███▀▀▀▀    ███      ▀▀███▀▀▀███  ▀▀▀▀▀▀███
-███   ███  ███   ███   ███  ███   ███ ██████████  ███   █▄   ███   ███  ▄██   ███
-███   ███  ███   ███   ███  ███   ███  ███   ███  ███   ███  ███   ███  ███   ███
- ▀█████▀    ▀█   ███   █▀   ███   █▀   ███   ███  ███████▀   ███   █▀    ▀█████▀
-                                       ███   █▀                                  '
+ansi_art='███╗   ██╗ ██████╗  ██████╗████████╗██████╗  █████╗
+████╗  ██║██╔═══██╗██╔════╝╚══██╔══╝██╔══██╗██╔══██╗
+██╔██╗ ██║██║   ██║██║        ██║   ██████╔╝███████║
+██║╚██╗██║██║   ██║██║        ██║   ██╔══██╗██╔══██║
+██║ ╚████║╚██████╔╝╚██████╗   ██║   ██║  ██║██║  ██║
+╚═╝  ╚═══╝ ╚═════╝  ╚═════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝
+       Noctra Hyprland Edition — powered by Arch + Hyprland'
 
 clear
 echo -e "\n$ansi_art\n"
@@ -34,10 +31,10 @@ fi
 
 sudo pacman -Syu --noconfirm --needed git
 
-# Use custom repo if specified, otherwise default to basecamp/omarchy
+# Use custom repo if specified. Defaults to upstream Omarchy until a Noctra repository is configured.
 OMARCHY_REPO="${OMARCHY_REPO:-basecamp/omarchy}"
 
-echo -e "\nCloning Omarchy from: https://github.com/${OMARCHY_REPO}.git"
+echo -e "\nCloning Noctra Hyprland Edition source from: https://github.com/${OMARCHY_REPO}.git"
 rm -rf ~/.local/share/omarchy/
 git clone "https://github.com/${OMARCHY_REPO}.git" ~/.local/share/omarchy >/dev/null
 
@@ -46,5 +43,5 @@ cd ~/.local/share/omarchy
 git fetch origin "${OMARCHY_REF}" && git checkout "${OMARCHY_REF}"
 cd -
 
-echo -e "\nInstallation starting..."
+echo -e "\nNoctra Hyprland Edition installation starting..."
 source ~/.local/share/omarchy/install.sh
