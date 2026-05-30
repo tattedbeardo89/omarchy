@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Sync Omarchy theme to all Obsidian vaults
+# omarchy:summary=Sync Noctra theme to all Obsidian vaults
 # omarchy:hidden=true
 
 CURRENT_THEME_DIR="$HOME/.config/omarchy/current/theme"
@@ -10,17 +10,16 @@ CURRENT_THEME_DIR="$HOME/.config/omarchy/current/theme"
 jq -r '.vaults | values[].path' ~/.config/obsidian/obsidian.json 2>/dev/null | while read -r vault_path; do
   [[ -d $vault_path/.obsidian ]] || continue
 
-  theme_dir="$vault_path/.obsidian/themes/Omarchy"
+  theme_dir="$vault_path/.obsidian/themes/Noctra"
   mkdir -p "$theme_dir"
 
   [[ -f $theme_dir/manifest.json ]] || cat >"$theme_dir/manifest.json" <<'EOF'
 {
-  "name": "Omarchy",
+  "name": "Noctra",
   "version": "1.0.0",
   "minAppVersion": "0.16.0",
-  "description": "Automatically syncs with your current Omarchy system theme colors and fonts",
-  "author": "Omarchy",
-  "authorUrl": "https://omarchy.org"
+  "description": "Automatically syncs with your current Noctra system theme colors and fonts",
+  "author": "Noctra"
 }
 EOF
 

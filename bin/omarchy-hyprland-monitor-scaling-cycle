@@ -36,7 +36,7 @@ NEW_GDK_SCALE=${GDK_SCALES[$NEW_IDX]}
 
 hyprctl eval "hl.monitor({ output = \"$ACTIVE_MONITOR\", mode = \"${WIDTH}x${HEIGHT}@${REFRESH_RATE}\", position = \"auto\", scale = $NEW_SCALE })" >/dev/null
 
-# Persist to monitors.lua if the user still has Omarchy's generic catch-all
+# Persist to monitors.lua if the user still has Noctra's generic catch-all
 # defaults, so the scale survives reboots.
 MONITOR_LUA="$HOME/.config/hypr/monitors.lua"
 if [[ -f $MONITOR_LUA ]] && grep -q '^local omarchy_monitor_scale = ' "$MONITOR_LUA"; then

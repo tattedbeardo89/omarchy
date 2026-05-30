@@ -7,16 +7,16 @@ description: >
   or ~/.config/omarchy/. Triggers: Hyprland, window rules, animations, keybindings,
   monitors, gaps, borders, blur, opacity, waybar, walker, terminal config, themes,
   background, night light, idle, lock screen, screenshots, reminders, layer rules,
-  workspace settings, display config, and user-facing omarchy commands. Excludes Omarchy
+  workspace settings, display config, and user-facing omarchy commands. Excludes Noctra
   source development in ~/.local/share/omarchy/ and `omarchy dev` workflows.
 ---
 
-# Omarchy Skill
+# Noctra Skill
 
-Manage [Omarchy](https://omarchy.org/) Linux systems - a beautiful, modern, opinionated Arch Linux distribution with Hyprland.
+Manage Noctra Hyprland Edition systems - a dark, polished, Arch-based power-user edition of Noctra OS built on Hyprland and derived from Noctra Hyprland Edition.
 
 This skill is for end-user customization on installed systems.
-It is not for contributing to Omarchy source code.
+It is not for contributing to Noctra source code.
 
 ## When This Skill MUST Be Used
 
@@ -34,13 +34,13 @@ It is not for contributing to Omarchy source code.
 
 **If you're about to edit a config file in ~/.config/ on this system, STOP and use this skill first.**
 
-**Do NOT use this skill for Omarchy development tasks** (editing files in `~/.local/share/omarchy/`, creating migrations, or running `omarchy dev ...` workflows).
+**Do NOT use this skill for Noctra development tasks** (editing files in `~/.local/share/omarchy/`, creating migrations, or running `omarchy dev ...` workflows).
 
 ## Critical Safety Rules
 
 **For end-user customization tasks, NEVER modify anything in `~/.local/share/omarchy/`** - but READING is safe and encouraged.
 
-This directory contains Omarchy's source files managed by git. Any changes will be:
+This directory contains Noctra Hyprland Edition source files managed by git. Any changes will be:
 - Lost on next `omarchy update`
 - Cause conflicts with upstream
 - Break the system's update mechanism
@@ -66,11 +66,11 @@ This directory contains Omarchy's source files managed by git. Any changes will 
 - `~/.config/omarchy/themes/<custom-name>/` - Custom themes (must be real directories)
 - `~/.config/omarchy/hooks/` - Custom automation hooks
 
-If the request is to develop Omarchy itself, this skill is out of scope. Follow repository development instructions instead of this skill.
+If the request is to develop Noctra itself, this skill is out of scope. Follow repository development instructions instead of this skill.
 
 ## System Architecture
 
-Omarchy is built on:
+Noctra Hyprland Edition is built on:
 
 | Component | Purpose | Config Location |
 |-----------|---------|-----------------|
@@ -84,7 +84,7 @@ Omarchy is built on:
 
 ## Command Discovery
 
-Omarchy ships a single `omarchy` CLI that dispatches to all `omarchy-*` binaries via `omarchy <group> <action>`. Always prefer this form — it is self-documenting and stable. The underlying `omarchy-*` binaries still exist on `PATH` and remain safe to read for source.
+Noctra Hyprland Edition currently ships the inherited `omarchy` CLI that dispatches to all `omarchy-*` binaries via `omarchy <group> <action>`. Always prefer this form — it is self-documenting and stable. The underlying `omarchy-*` binaries still exist on `PATH` and remain safe to read for source.
 
 ```bash
 # List every documented command and its summary
@@ -318,7 +318,7 @@ omarchy font set <name>         # Change font
 
 ```bash
 omarchy update                  # Full system update
-omarchy version                 # Show Omarchy version
+omarchy version                 # Show Noctra version
 omarchy debug --no-sudo --print # Debug info (ALWAYS use these flags)
 omarchy system lock             # Lock screen
 omarchy system shutdown         # Shutdown
@@ -372,7 +372,7 @@ omarchy reminder clear
 
 ## Out of Scope
 
-This skill intentionally does not cover Omarchy source development. Do not use this skill for:
+This skill intentionally does not cover Noctra source development. Do not use this skill for:
 - Editing files in `~/.local/share/omarchy/` (`bin/`, `config/`, `default/`, `themes/`, `migrations/`, etc.)
 - Creating or editing migrations
 - Running `omarchy dev ...` commands

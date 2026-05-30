@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# omarchy:summary=Open the Omarchy theme switcher
+# omarchy:summary=Open the Noctra theme switcher
 
 OMARCHY_PATH=${OMARCHY_PATH:-$HOME/.local/share/omarchy}
 USER_THEMES_PATH="$HOME/.config/omarchy/themes"

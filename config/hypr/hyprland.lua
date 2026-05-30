@@ -1,13 +1,13 @@
 -- Learn how to configure Hyprland: https://wiki.hypr.land/Configuring/Start/
 
--- Load user modules from ~/.config and Omarchy defaults from $OMARCHY_PATH.
+-- Load user modules from ~/.config and Noctra defaults from $OMARCHY_PATH.
 package.path = os.getenv("HOME")
   .. "/.config/?.lua;"
   .. (os.getenv("OMARCHY_PATH") or (os.getenv("HOME") .. "/.local/share/omarchy"))
   .. "/?.lua;"
   .. package.path
 
--- All Omarchy default setups
+-- All Noctra default setups
 require("default.hypr.omarchy")
 
 -- Change your own setup in these files and override defaults.
