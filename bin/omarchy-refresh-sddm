@@ -3,5 +3,20 @@
 # omarchy:summary=Refresh the SDDM theme from default
 # omarchy:requires-sudo=true
 
-sudo rm -rf /usr/share/sddm/themes/omarchy
-sudo cp -r $OMARCHY_PATH/default/sddm/omarchy /usr/share/sddm/themes/omarchy
+sddm_theme_dir=/usr/share/sddm/themes/omarchy
+noctra_logo=$OMARCHY_PATH/assets/noctra/logos/noctra-logo.png
+noctra_legacy_logo=$OMARCHY_PATH/assets/noctra/logos/logo.png
+noctra_background=$OMARCHY_PATH/assets/noctra/sddm/sddm-background.png
+
+sudo rm -rf "$sddm_theme_dir"
+sudo cp -r "$OMARCHY_PATH/default/sddm/omarchy" "$sddm_theme_dir"
+
+if [[ -f $noctra_logo ]]; then
+  sudo cp "$noctra_logo" "$sddm_theme_dir/logo.png"
+elif [[ -f $noctra_legacy_logo ]]; then
+  sudo cp "$noctra_legacy_logo" "$sddm_theme_dir/logo.png"
+fi
+
+if [[ -f $noctra_background ]]; then
+  sudo cp "$noctra_background" "$sddm_theme_dir/background.png"
+fi

@@ -5,18 +5,16 @@ set -euo pipefail
 repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 asset_root="$repo_root/assets/noctra"
 strict=false
-changed=0
-warnings=0
-missing_required=0
-declare -A missing_required_seen=()
+missing=0
+found=0
 
 usage() {
   cat <<USAGE
 Usage: scripts/apply-noctra-assets.sh [--strict]
 
-Copy uploaded Noctra artwork from assets/noctra/ into the existing repository
-asset paths. Missing optional files are reported and skipped. Missing required
-files fail only when --strict is passed.
+Verify uploaded Noctra artwork in assets/noctra/ and print the runtime wiring
+used by Plymouth, SDDM, Hyprlock, and the default wallpaper setup. This helper
+intentionally does not create, replace, or copy image files.
 USAGE
 }
 
@@ -38,128 +36,47 @@ while (($# > 0)); do
   shift
 done
 
-warn() {
-  echo "warning: $*" >&2
-  ((warnings += 1))
-}
+check_asset() {
+  local label=$1
+  local rel=$2
+  local requirement=${3:-required}
 
-mark_missing_required() {
-  local source_rel=$1
-  local dest_rel=$2
-
-  warn "missing required asset assets/noctra/$source_rel for $dest_rel"
-  if [[ -z ${missing_required_seen[$source_rel]+set} ]]; then
-    missing_required_seen[$source_rel]=1
-    ((missing_required += 1))
-  fi
-}
-
-copy_asset() {
-  local source_rel=$1
-  local dest_rel=$2
-  local requirement=${3:-optional}
-  local source="$asset_root/$source_rel"
-  local dest="$repo_root/$dest_rel"
-
-  if [[ ! -f $source ]]; then
-    if [[ $requirement == "required" ]]; then
-      mark_missing_required "$source_rel" "$dest_rel"
-    else
-      warn "missing optional asset assets/noctra/$source_rel; skipping $dest_rel"
-    fi
+  if [[ -f $asset_root/$rel ]]; then
+    echo "found: $label -> assets/noctra/$rel"
+    ((found += 1))
     return 0
   fi
-
-  mkdir -p "$(dirname -- "$dest")"
-  if [[ -f $dest ]] && cmp -s "$source" "$dest"; then
-    echo "unchanged: $dest_rel"
-    return 0
-  fi
-
-  cp "$source" "$dest"
-  echo "copied: assets/noctra/$source_rel -> $dest_rel"
-  ((changed += 1))
-}
-
-copy_first_existing() {
-  local dest_rel=$1
-  local requirement=$2
-  shift 2
-  local source_rel
-
-  for source_rel in "$@"; do
-    if [[ -f $asset_root/$source_rel ]]; then
-      copy_asset "$source_rel" "$dest_rel" "$requirement"
-      return 0
-    fi
-  done
 
   if [[ $requirement == "required" ]]; then
-    mark_missing_required "$1" "$dest_rel"
+    echo "missing: $label -> assets/noctra/$rel" >&2
+    ((missing += 1))
   else
-    warn "missing optional asset candidates for $dest_rel: $*"
+    echo "optional missing: $label -> assets/noctra/$rel"
   fi
 }
 
-copy_wallpaper() {
-  local dest_rel=$1
-  copy_first_existing "$dest_rel" required \
-    "wallpapers/wallpaper.png" \
-    "wallpapers/noctra-wallpaper2.png"
-}
+check_asset "Plymouth logo" "plymouth/plymouth-logo.png"
+check_asset "SDDM background" "sddm/sddm-background.png"
+check_asset "Default wallpaper" "wallpapers/wallpaper.png"
+check_asset "Hyprlock lockscreen" "wallpapers/lockscreen.png"
+check_asset "Shared Noctra logo" "logos/noctra-logo.png"
+check_asset "Legacy shared logo alias" "logos/logo.png" optional
+check_asset "Fastfetch-specific logo" "logos/fastfetch-logo.png" optional
+check_asset "Boot menu background" "boot/limine-background.png" optional
+check_asset "Boot menu logo" "boot/boot-menu-logo.png" optional
 
-copy_lockscreen() {
-  local dest_rel=$1
-  copy_first_existing "$dest_rel" required \
-    "wallpapers/lockscreen.png" \
-    "wallpapers/noctra-lockscreen2.png" \
-    "wallpapers/wallpaper.png"
-}
+echo
+echo "Runtime wiring:"
+echo "- Plymouth: bin/omarchy-refresh-plymouth copies assets/noctra/plymouth/plymouth-logo.png to the installed omarchy Plymouth theme logo paths."
+echo "- SDDM: bin/omarchy-refresh-sddm copies assets/noctra/logos/noctra-logo.png and assets/noctra/sddm/sddm-background.png to the installed omarchy SDDM theme paths."
+echo "- Hyprlock: config/hypr/hyprlock.conf references ~/.local/share/omarchy/assets/noctra/wallpapers/lockscreen.png."
+echo "- Wallpaper: install/config/theme.sh sets the initial background to ~/.local/share/omarchy/assets/noctra/wallpapers/wallpaper.png when present."
+echo "- Fastfetch: config/fastfetch/config.jsonc keeps text branding at ~/.config/omarchy/branding/about.txt."
+echo "- Boot branding: default/limine/limine.conf keeps Noctra text branding; optional boot PNG assets are not referenced until uploaded and explicitly supported."
 
-copy_first_existing "default/plymouth/logo.png" required \
-  "plymouth/plymouth-logo.png" \
-  "plymouth/logo.png" \
-  "logos/logo.png" \
-  "logos/noctra-logo.png"
-copy_first_existing "default/plymouth/logos/oma.png" optional \
-  "plymouth/plymouth-logo.png" \
-  "plymouth/oma.png" \
-  "logos/logo.png" \
-  "logos/noctra-logo.png"
-
-copy_first_existing "default/sddm/omarchy/logo.png" required \
-  "logos/logo.png" \
-  "logos/noctra-logo.png" \
-  "plymouth/plymouth-logo.png"
-copy_first_existing "default/sddm/omarchy/background.png" required \
-  "sddm/sddm-background.png" \
-  "wallpapers/lockscreen.png" \
-  "wallpapers/wallpaper.png"
-
-copy_wallpaper "themes/tokyo-night/backgrounds/0-noctra.png"
-copy_wallpaper "themes/tokyo-night/backgrounds/omarchy.png"
-copy_lockscreen "themes/tokyo-night/backgrounds/lockscreen.png"
-
-while IFS= read -r -d '' theme_background; do
-  dest_rel=${theme_background#"$repo_root/"}
-  [[ $dest_rel == "themes/tokyo-night/backgrounds/omarchy.png" ]] && continue
-  copy_wallpaper "$dest_rel"
-done < <(find "$repo_root/themes" -path '*/backgrounds/*omarchy*.png' -type f -print0 | sort -z)
-
-copy_first_existing "logo.png" optional \
-  "logos/logo.png" \
-  "logos/noctra-logo.png"
-for screenshot_dest in README.png README-dark.png README-terminal.png README-installer.png README-lock.png; do
-  copy_asset "screenshots/$screenshot_dest" "$screenshot_dest" optional
-done
-
-for boot_dest in grub-background.png limine-background.png boot-menu-logo.png; do
-  copy_asset "boot/$boot_dest" "$boot_dest" optional
-done
-
-if [[ $strict == true ]] && ((missing_required > 0)); then
-  echo "failed: $missing_required required asset(s) missing; no more changes can be guaranteed" >&2
+if [[ $strict == true ]] && ((missing > 0)); then
+  echo "failed: $missing required asset(s) missing" >&2
   exit 1
 fi
 
-echo "summary: $changed file(s) copied, $warnings warning(s), $missing_required required asset(s) missing"
+echo "summary: $found asset(s) found, $missing required asset(s) missing"

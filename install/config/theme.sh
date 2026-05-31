@@ -11,6 +11,9 @@ sudo chmod a+rw /etc/chromium/policies/managed
 
 # Set initial theme
 omarchy-theme-set "Tokyo Night"
+if [[ -f $OMARCHY_PATH/assets/noctra/wallpapers/wallpaper.png ]]; then
+  omarchy-theme-bg-set "$OMARCHY_PATH/assets/noctra/wallpapers/wallpaper.png"
+fi
 rm -rf ~/.config/chromium/SingletonLock # otherwise archiso will own the chromium singleton
 
 # Set specific app links for current theme
