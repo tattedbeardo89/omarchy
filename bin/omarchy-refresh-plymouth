@@ -3,7 +3,22 @@
 # omarchy:summary=Overwrite the user config for the Plymouth drive decryption and boot sequence with the Noctra default and rebuild it.
 # omarchy:requires-sudo=true
 
-sudo cp -r ~/.local/share/omarchy/default/plymouth/* /usr/share/plymouth/themes/omarchy/
+plymouth_theme_dir=/usr/share/plymouth/themes/omarchy
+noctra_plymouth_logo=$OMARCHY_PATH/assets/noctra/plymouth/plymouth-logo.png
+noctra_shared_logo=$OMARCHY_PATH/assets/noctra/logos/noctra-logo.png
+
+sudo cp -r ~/.local/share/omarchy/default/plymouth/* "$plymouth_theme_dir/"
+
+if [[ -f $noctra_plymouth_logo ]]; then
+  sudo cp "$noctra_plymouth_logo" "$plymouth_theme_dir/logo.png"
+  sudo mkdir -p "$plymouth_theme_dir/logos"
+  sudo cp "$noctra_plymouth_logo" "$plymouth_theme_dir/logos/oma.png"
+elif [[ -f $noctra_shared_logo ]]; then
+  sudo cp "$noctra_shared_logo" "$plymouth_theme_dir/logo.png"
+  sudo mkdir -p "$plymouth_theme_dir/logos"
+  sudo cp "$noctra_shared_logo" "$plymouth_theme_dir/logos/oma.png"
+fi
+
 sudo plymouth-set-default-theme omarchy
 
 if command -v limine-mkinitcpio &>/dev/null; then
