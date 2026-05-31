@@ -13,7 +13,7 @@ description: >
 
 # Noctra Skill
 
-Manage Noctra Hyprland Edition systems - a dark, polished, Arch-based power-user edition of Noctra OS built on Hyprland and derived from Noctra Hyprland Edition.
+Manage Noctra Hyprland Edition systems - a dark, polished, Arch-based power-user edition of Noctra OS built on Hyprland and derived from Omarchy.
 
 This skill is for end-user customization on installed systems.
 It is not for contributing to Noctra source code.
@@ -84,7 +84,7 @@ Noctra Hyprland Edition is built on:
 
 ## Command Discovery
 
-Noctra Hyprland Edition currently ships the inherited `omarchy` CLI that dispatches to all `omarchy-*` binaries via `omarchy <group> <action>`. Always prefer this form — it is self-documenting and stable. The underlying `omarchy-*` binaries still exist on `PATH` and remain safe to read for source.
+Noctra Hyprland Edition currently ships the inherited `omarchy` CLI as the Noctra command center, compatible with Omarchy command paths, dispatching to all `omarchy-*` binaries via `omarchy <group> <action>`. Always prefer this form — it is self-documenting and stable. The underlying `omarchy-*` binaries still exist on `PATH` and remain safe to read for source.
 
 ```bash
 # List every documented command and its summary
