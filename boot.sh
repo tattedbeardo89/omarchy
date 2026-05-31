@@ -31,8 +31,8 @@ fi
 
 sudo pacman -Syu --noconfirm --needed git
 
-# Use custom repo if specified. Defaults to upstream Omarchy until a Noctra repository is configured.
-OMARCHY_REPO="${OMARCHY_REPO:-basecamp/omarchy}"
+# Use custom repo if specified. Defaults to the canonical Noctra fork while preserving OMARCHY_REPO compatibility.
+OMARCHY_REPO="${OMARCHY_REPO:-tattedbeardo89/omarchy}"
 
 echo -e "\nCloning Noctra Hyprland Edition source from: https://github.com/${OMARCHY_REPO}.git"
 rm -rf ~/.local/share/omarchy/

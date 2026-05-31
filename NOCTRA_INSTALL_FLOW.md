@@ -35,12 +35,12 @@ The user-facing installation model is therefore:
 7. Checks out `OMARCHY_REF`.
 8. Sources `~/.local/share/omarchy/install.sh`.
 
-Important validation finding: `OMARCHY_REPO` still defaults to `basecamp/omarchy`. Until a Noctra GitHub repository is configured, a user must explicitly set `OMARCHY_REPO` to the Noctra repository when using the bootstrap path, or the bootstrap will clone upstream Omarchy instead of this Noctra tree.
+Noctra Hyprland Edition is derived from Omarchy, but `boot.sh` now bootstraps from `tattedbeardo89/omarchy` by default. The inherited `OMARCHY_REPO` variable remains supported for compatibility and can still override the clone source when needed.
 
-Example intended shape once a Noctra repository exists:
+Example override shape:
 
 ```bash
-OMARCHY_REPO='<noctra-org>/<noctra-repo>' bash <(curl -fsSL '<published boot.sh URL>')
+OMARCHY_REPO='<owner>/<repo>' bash <(curl -fsSL '<published boot.sh URL>')
 ```
 
 ### Local/manual installer path
@@ -289,7 +289,7 @@ flowchart TD
 
 ### Entry/bootstrap
 
-- `boot.sh` defaults to `OMARCHY_REPO=basecamp/omarchy`; this is a critical Noctra bootstrap risk until changed or overridden.
+- `boot.sh` defaults to `OMARCHY_REPO=tattedbeardo89/omarchy`, so online bootstrap installs the canonical Noctra fork by default while preserving the inherited override variable.
 - Network failures can affect pacman, GitHub clone/fetch, keyserver access, package refreshes, npm installs, and support-log upload.
 - `OMARCHY_REF` must exist in the selected repository.
 - The configured package mirrors are still Omarchy-compatible URLs, not Noctra-owned mirrors.

@@ -6,13 +6,13 @@ This file lists only items found in the installation, first-boot, first-login, o
 
 Most primary first-boot branding surfaces now resolve to Noctra: installer banner, install progress logo, install completion logo, Limine branding, Plymouth artwork, SDDM artwork/metadata, session display name, wallpaper, lockscreen, Fastfetch OS text, and Waybar tooltip.
 
-The remaining user-visible Omarchy items are mostly compatibility names surfaced in commands, paths, logs, or fallback infrastructure. The most important functional risk is the online bootstrap default repository.
+The remaining user-visible Omarchy items are mostly compatibility names surfaced in commands, paths, logs, or fallback infrastructure. The online bootstrap default now points at the canonical Noctra fork.
 
 ## Items to address or consciously accept
 
 | Priority | Item | Where visible | Current behavior | Recommendation |
 | --- | --- | --- | --- | --- |
-| Critical | Bootstrap repository default | Terminal during online install | `boot.sh` defaults `OMARCHY_REPO` to `basecamp/omarchy`, so a user who does not override it can clone and install upstream Omarchy instead of Noctra. The terminal message says it is cloning Noctra source, but the URL is upstream. | Change the default to the Noctra repository as soon as a canonical repository exists, or make `OMARCHY_REPO` mandatory for Noctra bootstrap. |
+| Resolved | Bootstrap repository default | Terminal during online install | `boot.sh` defaults `OMARCHY_REPO` to `tattedbeardo89/omarchy`, so Noctra Hyprland Edition bootstraps from the canonical Noctra fork by default. The inherited `OMARCHY_REPO` override remains available for compatibility. | Keep this resolved unless the canonical Noctra repository moves; do not rename `omarchy` commands as part of this item. |
 | High | Omarchy package mirror URLs | Terminal/logs during bootstrap and pacman setup, `/etc/pacman.d/mirrorlist` | `boot.sh` and pacman setup use `stable-mirror.omarchy.org`, `rc-mirror.omarchy.org`, or `mirror.omarchy.org`. Users can see these URLs in logs or pacman config. | Keep only if intentionally using upstream package infrastructure; otherwise replace with Noctra-owned mirror URLs. |
 | Medium | Install log path and stage paths | Failure UI, support flow, `/var/log/omarchy-install.log` | The installer log file is `/var/log/omarchy-install.log`, and the failure UI can show scripts under `~/.local/share/omarchy/install/...`. | Accept as compatibility or add Noctra aliases/log paths in a later migration. |
 | Medium | CLI namespace | Desktop shortcuts, Waybar actions, help output, terminal commands | User-facing commands are still `omarchy`, `omarchy-*`, and paths like `~/.config/omarchy`. The Waybar menu tooltip says `Noctra Menu`, but its click action runs `omarchy-menu`. | Accept for now if preserving Omarchy command compatibility; otherwise plan a separate CLI alias/rename migration. |
