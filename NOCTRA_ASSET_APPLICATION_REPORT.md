@@ -30,8 +30,9 @@ The user-provided prompt also referenced `assets/noctra/logos/logo.png`; this ex
 
 ## Config Files Modified
 
-- `scripts/apply-noctra-assets.sh` now verifies uploaded Noctra assets and reports the active wiring without copying or creating image files.
+- `scripts/apply-noctra-assets.sh` now verifies uploaded Noctra assets, reports the active wiring, and checks that the Plymouth, SDDM, Hyprlock, and wallpaper source references resolve without copying or creating image files.
 - `bin/omarchy-refresh-plymouth` now overlays uploaded Noctra Plymouth logo assets into the installed Plymouth theme at refresh time, preserving the `omarchy` theme name and internal paths.
+- `install/login/plymouth.sh` now delegates initial Plymouth setup to `omarchy-refresh-plymouth` so fresh installs receive the uploaded Noctra Plymouth logo overlay through the same compatibility-preserving refresh path.
 - `bin/omarchy-refresh-sddm` now overlays uploaded Noctra SDDM logo/background assets into the installed SDDM theme at refresh time, preserving the inherited `omarchy` SDDM theme path.
 - `config/hypr/hyprlock.conf` now references the uploaded Noctra lockscreen asset directly through the installed repository path.
 - `install/config/theme.sh` now sets the uploaded Noctra wallpaper as the initial default wallpaper when present.
@@ -97,7 +98,7 @@ These image paths keep inherited Omarchy-compatible names or are still existing 
 
 - `assets/noctra/logos/logo.png` was mentioned as an existing asset in the request but is not present in the repository. This is not a broken runtime reference because current scripts use `assets/noctra/logos/noctra-logo.png` first and treat `assets/noctra/logos/logo.png` only as an optional legacy alias.
 - `default/sddm/omarchy/Main.qml` references `background.png`, but `default/sddm/omarchy/background.png` is not tracked. This is resolved at install/refresh time by `bin/omarchy-refresh-sddm`, which copies `assets/noctra/sddm/sddm-background.png` to `/usr/share/sddm/themes/omarchy/background.png`.
-- No broken Plymouth source reference was found for the installed theme path: `omarchy.script` references `logo.png`, and `bin/omarchy-refresh-plymouth` ensures that filename is present in the installed theme from uploaded Noctra assets.
+- No broken Plymouth source reference was found for the installed theme path: `omarchy.script` references `logo.png`, `install/login/plymouth.sh` invokes `omarchy-refresh-plymouth`, and `bin/omarchy-refresh-plymouth` ensures that filename is present in the installed theme from uploaded Noctra assets.
 - No broken Hyprlock source reference was found: the configured lockscreen path maps to the tracked uploaded asset after normal Omarchy installation.
 - No broken default wallpaper source reference was found: the configured wallpaper path maps to the tracked uploaded asset after normal Omarchy installation.
 

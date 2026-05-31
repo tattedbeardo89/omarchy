@@ -4,9 +4,17 @@ set -euo pipefail
 
 repo_root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 asset_root="$repo_root/assets/noctra"
+omarchy_path=${OMARCHY_PATH:-~/.local/share/omarchy}
 strict=false
 missing=0
 found=0
+broken=0
+
+repo_asset_exists() {
+  local rel=$1
+
+  [[ -f $repo_root/$rel ]]
+}
 
 usage() {
   cat <<USAGE
@@ -55,6 +63,20 @@ check_asset() {
   fi
 }
 
+verify_reference() {
+  local label=$1
+  local runtime_path=$2
+  local source_rel=$3
+
+  if repo_asset_exists "$source_rel"; then
+    echo "resolved: $label -> $runtime_path (source: $source_rel)"
+    return 0
+  fi
+
+  echo "broken: $label -> $runtime_path (missing source: $source_rel)" >&2
+  ((broken += 1))
+}
+
 check_asset "Plymouth logo" "plymouth/plymouth-logo.png"
 check_asset "SDDM background" "sddm/sddm-background.png"
 check_asset "Default wallpaper" "wallpapers/wallpaper.png"
@@ -74,9 +96,18 @@ echo "- Wallpaper: install/config/theme.sh sets the initial background to ~/.loc
 echo "- Fastfetch: config/fastfetch/config.jsonc keeps text branding at ~/.config/omarchy/branding/about.txt."
 echo "- Boot branding: default/limine/limine.conf keeps Noctra text branding; optional boot PNG assets are not referenced until uploaded and explicitly supported."
 
-if [[ $strict == true ]] && ((missing > 0)); then
-  echo "failed: $missing required asset(s) missing" >&2
+echo
+echo "Reference resolution:"
+verify_reference "Plymouth logo source" "/usr/share/plymouth/themes/omarchy/logo.png" "assets/noctra/plymouth/plymouth-logo.png"
+verify_reference "Plymouth compatibility logo source" "/usr/share/plymouth/themes/omarchy/logos/oma.png" "assets/noctra/plymouth/plymouth-logo.png"
+verify_reference "SDDM logo source" "/usr/share/sddm/themes/omarchy/logo.png" "assets/noctra/logos/noctra-logo.png"
+verify_reference "SDDM background source" "/usr/share/sddm/themes/omarchy/background.png" "assets/noctra/sddm/sddm-background.png"
+verify_reference "Hyprlock lockscreen" "~/.local/share/omarchy/assets/noctra/wallpapers/lockscreen.png" "assets/noctra/wallpapers/lockscreen.png"
+verify_reference "Default wallpaper" "$omarchy_path/assets/noctra/wallpapers/wallpaper.png" "assets/noctra/wallpapers/wallpaper.png"
+
+if [[ $strict == true ]] && ((missing > 0 || broken > 0)); then
+  echo "failed: $missing required asset(s) missing, $broken broken reference(s)" >&2
   exit 1
 fi
 
-echo "summary: $found asset(s) found, $missing required asset(s) missing"
+echo "summary: $found asset(s) found, $missing required asset(s) missing, $broken broken reference(s)"
