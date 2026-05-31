@@ -14,7 +14,7 @@ usage() {
   cat <<USAGE
 Usage: scripts/apply-noctra-assets.sh [--strict]
 
-Copy prepared Noctra artwork from assets/noctra/ into the existing repository
+Copy uploaded Noctra artwork from assets/noctra/ into the existing repository
 asset paths. Missing optional files are reported and skipped. Missing required
 files fail only when --strict is passed.
 USAGE
@@ -81,51 +81,74 @@ copy_asset() {
   ((changed += 1))
 }
 
-copy_wallpaper() {
-  local theme=$1
-  local dest_rel=$2
-  local theme_source="$asset_root/wallpapers/$theme.png"
-  local fallback_source="$asset_root/wallpapers/noctra-4k.png"
+copy_first_existing() {
+  local dest_rel=$1
+  local requirement=$2
+  shift 2
+  local source_rel
 
-  if [[ -f $theme_source ]]; then
-    copy_asset "wallpapers/$theme.png" "$dest_rel" optional
-  elif [[ -f $fallback_source ]]; then
-    copy_asset "wallpapers/noctra-4k.png" "$dest_rel" required
+  for source_rel in "$@"; do
+    if [[ -f $asset_root/$source_rel ]]; then
+      copy_asset "$source_rel" "$dest_rel" "$requirement"
+      return 0
+    fi
+  done
+
+  if [[ $requirement == "required" ]]; then
+    mark_missing_required "$1" "$dest_rel"
   else
-    mark_missing_required "wallpapers/noctra-4k.png" "$dest_rel"
+    warn "missing optional asset candidates for $dest_rel: $*"
   fi
 }
 
-copy_asset "logos/noctra-logo.svg" "logo.svg" required
-copy_asset "logos/noctra-icon.png" "icon.png" required
-copy_asset "logos/noctra-icon.png" "default/chromium/extensions/copy-url/icon.png" required
-copy_asset "logos/noctra-terminal-logo.txt" "logo.txt" optional
-copy_asset "logos/noctra-fastfetch-about.txt" "icon.txt" optional
+copy_wallpaper() {
+  local dest_rel=$1
+  copy_first_existing "$dest_rel" required \
+    "wallpapers/wallpaper.png" \
+    "wallpapers/noctra-wallpaper2.png"
+}
 
-copy_asset "plymouth/logo.png" "default/plymouth/logo.png" required
-copy_asset "plymouth/oma.png" "default/plymouth/logos/oma.png" optional
-copy_asset "plymouth/bullet.png" "default/plymouth/bullet.png" required
-copy_asset "plymouth/entry.png" "default/plymouth/entry.png" required
-copy_asset "plymouth/lock.png" "default/plymouth/lock.png" required
-copy_asset "plymouth/progress_bar.png" "default/plymouth/progress_bar.png" optional
-copy_asset "plymouth/progress_box.png" "default/plymouth/progress_box.png" optional
-copy_asset "plymouth/preview-unlock.png" "default/plymouth/preview-unlock.png" optional
+copy_lockscreen() {
+  local dest_rel=$1
+  copy_first_existing "$dest_rel" required \
+    "wallpapers/lockscreen.png" \
+    "wallpapers/noctra-lockscreen2.png" \
+    "wallpapers/wallpaper.png"
+}
 
-copy_asset "sddm/logo.png" "default/sddm/omarchy/logo.png" required
-copy_asset "sddm/bullet.png" "default/sddm/omarchy/bullet.png" required
-copy_asset "sddm/entry.png" "default/sddm/omarchy/entry.png" required
-copy_asset "sddm/entry-failed.png" "default/sddm/omarchy/entry-failed.png" optional
-copy_asset "sddm/lock.png" "default/sddm/omarchy/lock.png" required
-copy_asset "sddm/lock-failed.png" "default/sddm/omarchy/lock-failed.png" optional
+copy_first_existing "default/plymouth/logo.png" required \
+  "plymouth/plymouth-logo.png" \
+  "plymouth/logo.png" \
+  "logos/logo.png" \
+  "logos/noctra-logo.png"
+copy_first_existing "default/plymouth/logos/oma.png" optional \
+  "plymouth/plymouth-logo.png" \
+  "plymouth/oma.png" \
+  "logos/logo.png" \
+  "logos/noctra-logo.png"
 
-while IFS= read -r wallpaper_dest; do
-  theme=${wallpaper_dest#themes/}
-  theme=${theme%%/*}
-  copy_wallpaper "$theme" "$wallpaper_dest"
-done < <(find "$repo_root/themes" -path '*/backgrounds/omarchy.png' -type f -printf '%P\n' | sed 's#^#themes/#' | sort)
+copy_first_existing "default/sddm/omarchy/logo.png" required \
+  "logos/logo.png" \
+  "logos/noctra-logo.png" \
+  "plymouth/plymouth-logo.png"
+copy_first_existing "default/sddm/omarchy/background.png" required \
+  "sddm/sddm-background.png" \
+  "wallpapers/lockscreen.png" \
+  "wallpapers/wallpaper.png"
 
-copy_wallpaper "flexoki-light" "themes/flexoki-light/backgrounds/2-omarchy.png"
+copy_wallpaper "themes/tokyo-night/backgrounds/0-noctra.png"
+copy_wallpaper "themes/tokyo-night/backgrounds/omarchy.png"
+copy_lockscreen "themes/tokyo-night/backgrounds/lockscreen.png"
 
+while IFS= read -r -d '' theme_background; do
+  dest_rel=${theme_background#"$repo_root/"}
+  [[ $dest_rel == "themes/tokyo-night/backgrounds/omarchy.png" ]] && continue
+  copy_wallpaper "$dest_rel"
+done < <(find "$repo_root/themes" -path '*/backgrounds/*omarchy*.png' -type f -print0 | sort -z)
+
+copy_first_existing "logo.png" optional \
+  "logos/logo.png" \
+  "logos/noctra-logo.png"
 for screenshot_dest in README.png README-dark.png README-terminal.png README-installer.png README-lock.png; do
   copy_asset "screenshots/$screenshot_dest" "$screenshot_dest" optional
 done
