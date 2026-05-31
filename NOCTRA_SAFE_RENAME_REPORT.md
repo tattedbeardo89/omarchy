@@ -1332,3 +1332,9 @@ Includes SDDM assets, Plymouth assets, Waybar-adjacent assets, Hyprland-adjacent
 5. Rename SDDM/Plymouth theme directories/descriptors and regenerate boot assets/initramfs where required.
 6. Replace visual brand assets and regenerate previews last.
 
+
+## First Safe Rename Pass Status
+
+The first safe user-facing rename pass has been applied and summarized in `NOCTRA_SAFE_RENAME_PASS_SUMMARY.md`.
+
+This pass kept high-risk and critical compatibility identifiers intact, including inherited `omarchy` commands, paths, state directories, migrations, package infrastructure, and service/session file names. It also confirmed that final bitmap/logo replacements are still required and deferred to a later asset pass because final Noctra artwork was not provided.

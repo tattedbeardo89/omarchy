@@ -2,7 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Suggestion
     url: https://github.com/basecamp/omarchy/discussions/categories/suggestions
-    about: Suggest a new feature, change to existing feature, or other ideas in Discussions.
+    about: Suggest a Noctra feature or change in the inherited upstream discussion space until dedicated Noctra infrastructure is configured.
   - name: Support
     url: https://omarchy.org/discord
-    about: Need help? Join our Discord community for support with any issues. GitHub issues should be used for verified bugs only.
+    about: Need help? Join the inherited upstream community for support until dedicated Noctra infrastructure is configured. GitHub issues should be used for verified bugs only.

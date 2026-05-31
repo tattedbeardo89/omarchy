@@ -1,4 +1,4 @@
-# Install omarchy SDDM theme
+# Install Noctra SDDM theme while preserving the inherited omarchy theme path
 omarchy-refresh-sddm
 
 # Setup SDDM login service
