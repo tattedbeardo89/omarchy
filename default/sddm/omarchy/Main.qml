@@ -7,6 +7,18 @@ Rectangle {
   height: 480
   color: "#1a1b26"
 
+  Image {
+    id: background
+    anchors.fill: parent
+    source: "background.png"
+    fillMode: Image.PreserveAspectCrop
+  }
+
+  Rectangle {
+    anchors.fill: parent
+    color: "#99000000"
+  }
+
   property string currentUser: userModel.lastUser
   property bool loginFailed: false
   property int sessionIndex: {
